@@ -1,18 +1,14 @@
 #!/bin/bash -ex
 # output user data logs into a separate file for debugging
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-# this ensure the bashrc file is created
-touch ~/.bashrc
-# download nvm, double check URL to ensure this is the most up to date version & URL still links!
+# START
+echo "Setting up NodeJS Environment"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-# source nvm
-. ~/.nvm/nvm.sh
-# install node
-nvm install node
-#export NVM dir
-export NVM_DIR="/.nvm"	
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"	
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
+echo 'export NVM_DIR="/home/ec2-user/.nvm"' >> /home/ec2-usr/.bashrc
+echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> /home/ec2-user/.bashrc
+# Dot source the files to ensure that variables are available within the current shell
+. /home/ec2-user/.nvm/nvm.sh
+. /home/ec2-user/.bashrc
 #upgrade yum
 sudo yum upgrade
 #install git
