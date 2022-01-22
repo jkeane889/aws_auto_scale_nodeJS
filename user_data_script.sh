@@ -1,23 +1,27 @@
 #!/bin/bash -ex
 # output user data logs into a separate file for debugging
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-# START
-echo "Setting up NodeJS Environment"
+# download nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-echo 'export NVM_DIR="/home/ec2-user/.nvm"' >> /home/ec2-usr/.bashrc
-echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> /home/ec2-user/.bashrc
-# Dot source the files to ensure that variables are available within the current shell
-. /home/ec2-user/.nvm/nvm.sh
-. /home/ec2-user/.bashrc
+# using bash profile
+source ~/.bash_profile
+# source nvm
+. /.nvm/nvm.sh
+# install node
+nvm install node
+#export NVM dir
+export NVM_DIR="/.nvm"	
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"	
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
 #upgrade yum
 sudo yum upgrade
 #install git
 sudo yum install git -y
 cd /home/ec2-user
 # get source code from githubt
-git clone https://github.com/jkeane889/aws_auto_scale_nodeJS
+git clone https://github.com/felixyu9/auto-scaling-nodejs-app
 #get in project dir
-cd aws_auto_scale_nodeJS
+cd auto-scaling-nodejs-app
 #give permission
 sudo chmod -R 755 .
 #install node module
