@@ -2,7 +2,7 @@
   "name": "aws_auto_scale_nodejs",
   "version": "1.0.0",
   "description": "aws auto-scale project for express and socket.io",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
