@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash
 # output user data logs into a separate file for debugging
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 # download nvm
