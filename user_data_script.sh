@@ -3,7 +3,8 @@
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 # download nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-# using bash profile
+# source nvm
+. /.nvm/nvm.sh
 # export NVM dir
 cat <<EOF >> /home/ec2-user/.bashrc
 export NVM_DIR="/.nvm"
