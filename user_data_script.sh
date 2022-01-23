@@ -4,15 +4,11 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 # download nvm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 # using bash profile
-source ~/.bash_profile
-# source nvm
-. /.nvm/nvm.sh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # install node
 nvm install node
 #export NVM dir
-export NVM_DIR="/.nvm"	
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"	
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
 #upgrade yum
 sudo yum upgrade
 #install git
