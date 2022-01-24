@@ -18,7 +18,7 @@ sudo yum upgrade
 sudo yum install git -y
 cd /home/ec2-user
 # get source code from githubt
-git clone https://github.com/felixyu9/auto-scaling-nodejs-app
+git clone https://github.com/jkeane889/aws_auto_scale_nodeJS
 #get in project dir
 cd auto-scaling-nodejs-app
 #give permission
