@@ -1,9 +1,9 @@
-const express = require('express');
 const path = require('path');
-import { createClient } from "redis";
+const express = require('express');
 const { Server } = require("socket.io");
 const { createServer } = require("http");
-import { createAdapter } from "@socket.io/redis-adapter";
+const { createClient } = require("redis");
+const { createAdapter } = require("@socket.io/redis-adapter");
 
 // config for socket.io
 const config = {
@@ -26,9 +26,7 @@ app.get('*', (req, res) => {
 const pubClient = createClient({ host: process.env.REDIS_ENDPOINT, port: 6379 });
 const subClient = pubClient.duplicate();
 
-Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-    io.adapter(createAdapter(pubClient, subClient));
-});
+io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
     console.log('New user connected')
