@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 import { createClient } from "redis";
 const { Server } = require("socket.io");
 const { createServer } = require("http");
@@ -15,9 +16,11 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, config);
 
-app.get('/', (req, res) => {
-    res.send('<h1>Auto Scaling App</h1><h4>Message: Success!</h4><p>Version: 1.0.0</p>')
-})
+app.use(express.static('app/build'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'app', 'build', 'index.html'));
+});
 
 // TODO: save Redis cluster host name in environmental file
 const pubClient = createClient({ host: 'redis-cluster-test.sufcdc.clustercfg.use1.cache.amazonaws.com', port: 6379 });
