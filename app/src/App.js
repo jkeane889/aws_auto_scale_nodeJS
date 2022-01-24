@@ -1,20 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import { io } from "socket.io-client";
 import './App.css';
 
 function App() {
+  // client-side, served on same domain
+  const socket = io('/', {
+    reconnection: true,
+    reconnectionAttempts: 500,
+    reconnectionDelayMax: 5000,
+    reconnectionDelay: 1000,
+    transports: ['websocket'],
+  });
 
-  useEffect(() => {
-    // client-side, served on same domain
-    const socket = io();
+  console.log('attempting to connect socket')
 
-    // client-side
-    socket.on("connect", () => {
-      console.log(socket.connected); // true
-      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-    });
-  }, [])
+  // client-side
+  socket.on("connect", () => {
+    console.log('connecting to socket')
+    console.log(socket.connected); // true
+    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  });
 
   return (
     <div className="App">
