@@ -31,5 +31,7 @@ cd app/
 npm install
 # generate build folder for application
 npm run build
+# navigate back to server
+cd ..
 # start the app
 node app.js > app.out.log 2> app.err.log < /dev/null &
