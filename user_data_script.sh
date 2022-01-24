@@ -20,7 +20,7 @@ cd /home/ec2-user
 # get source code from githubt
 git clone https://github.com/jkeane889/aws_auto_scale_nodeJS
 #get in project dir
-cd auto-scaling-nodejs-app
+cd aws_auto_scale_nodeJS
 #give permission
 sudo chmod -R 755 .
 #install node modules for server
