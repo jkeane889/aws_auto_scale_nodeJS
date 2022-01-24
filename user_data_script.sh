@@ -23,7 +23,13 @@ git clone https://github.com/felixyu9/auto-scaling-nodejs-app
 cd auto-scaling-nodejs-app
 #give permission
 sudo chmod -R 755 .
-#install node module
+#install node modules for server
 npm install
+# navigate to frontend code
+cd app/
+# install node modules for client
+npm install
+# generate build folder for application
+npm run build
 # start the app
 node app.js > app.out.log 2> app.err.log < /dev/null &
