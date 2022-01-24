@@ -23,7 +23,7 @@ app.get('*', (req, res) => {
 });
 
 // TODO: save Redis cluster host name in environmental file
-const pubClient = createClient({ host: process.env.REDIS_ENDPOINT, port: 6379 });
+const pubClient = createClient({ host: 'redis-cluster-test.sufcdc.clustercfg.use1.cache.amazonaws.com', port: 6379 });
 const subClient = pubClient.duplicate();
 
 io.adapter(createAdapter(pubClient, subClient));
