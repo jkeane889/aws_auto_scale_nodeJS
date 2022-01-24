@@ -29,6 +29,7 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 
 io.on("connection", (socket) => {
     console.log('New user connected')
+    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
 });
 
 httpServer.listen(3000);
