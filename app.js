@@ -4,6 +4,7 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 const { createClient } = require("redis");
+const { addRedisUser } = require('./redisClient')
 const { createAdapter } = require("@socket.io/redis-adapter");
 
 // config for socket.io - may not need!
@@ -48,8 +49,8 @@ const subClient = pubClient.duplicate();
 io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (socket) => {
-    console.log('New user connected')
     console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    socket.emit('hello to all clients!');
 });
 
 httpServer.listen(3000, () => {
