@@ -2,7 +2,7 @@ const redis = require('redis');
 
 class RedisManager {
     constructor() {
-      this.HOST = ''; // add HOST here!
+      this.HOST = 'redis-test.sufcdc.0001.use1.cache.amazonaws.com'; // add HOST here!
       this.PORT = 6379;
       //this.AUTH_PASS = auth_pass;
   

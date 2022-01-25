@@ -7,6 +7,8 @@ const { createClient } = require("redis");
 const RedisManager = require('./redisClient')
 const { createAdapter } = require("@socket.io/redis-adapter");
 
+// a comment
+
 // config for socket.io - may not need!
 const config = {
     pingTimeout: 60000,
@@ -47,7 +49,7 @@ app.get('*', (req, res) => {
 });
 
 // TODO: save Redis cluster host name in environmental file
-const pubClient = createClient({ host: '', port: 6379 });
+const pubClient = createClient({ host: 'redis-test.sufcdc.0001.use1.cache.amazonaws.com', port: 6379 });
 const subClient = pubClient.duplicate();
 
 io.adapter(createAdapter(pubClient, subClient));
