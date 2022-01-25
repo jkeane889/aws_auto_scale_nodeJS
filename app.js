@@ -4,8 +4,8 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 const { createClient } = require("redis");
+const RedisManager = require('./redisClient')
 const { createAdapter } = require("@socket.io/redis-adapter");
-const { setRedisUsers, addRedisUser } = require('./redisClient')
 
 // config for socket.io - may not need!
 const config = {
@@ -17,9 +17,10 @@ const config = {
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {});
+const redisCache = new RedisManager();
 
 // initialize Redis users to empty array
-setRedisUsers([]);
+redisCache.setRedisUsers([]);
 
 // to utilize CORS with origin
 app.use(function (req, res, next) {

@@ -1,68 +1,69 @@
 const redis = require('redis');
 
-const client = redis.createClient({
-    host: 'redis-cluster-test.sufcdc.clustercfg.use1.cache.amazonaws.com',
-    port: 6379,
-});
+class RedisManager {
+    constructor() {
+      this.HOST = 'redis-cluster-test.sufcdc.clustercfg.use1.cache.amazonaws.com';
+      this.PORT = 6379;
+      //this.AUTH_PASS = auth_pass;
+  
+      this.client = redis.createClient({
+        host: this.HOST,
+        port: this.PORT,
+        //  auth_pass: this.AUTH_PASS
+      });
+    }
 
-client.on("connect", function () {
-    console.log("redis connected");
-});
+    addRedisUser(user) {
+        return new Promise((resolve, reject) => {
+            this.client.get('storedUsers', (error, users) => {
+                if (users) {
+                    var oldUsers = JSON.parse(users);
 
-client.on('error', err => {
-    console.log('Error ' + err);
-});
+                    console.log('this is oldUsers: ', oldUsers)
 
-function addRedisUser(user) {
-    return new Promise((resolve, reject) => {
-        client.get('storedUsers', (error, users) => {
-            if (users) {
-                var oldUsers = JSON.parse(users);
+                    const index = oldUsers.findIndex((u) => u.id === user.id);
 
-                console.log('this is oldUsers: ', oldUsers)
+                    if (index >= 0) {
+                        oldUsers[index] = user;
+                    } else {
+                        oldUsers.push(user);
+                    }
 
-                const index = oldUsers.findIndex((u) => u.id === user.id);
+                    this.client.set('storedUsers', JSON.stringify(oldUsers));
 
-                if (index >= 0) {
-                    oldUsers[index] = user;
+                    return resolve({
+                        users: oldUsers,
+                    });
                 } else {
-                    oldUsers.push(user);
-                }
-
-                client.set('storedUsers', JSON.stringify(oldUsers));
-
-                return resolve({
-                    users: oldUsers,
-                });
-            } else {
-                return reject({
-                    error: true,
-                    message: error,
-                });
-            }
-        });
-    });
-}
-
-function setRedisUsers(newArray) {
-    return new Promise((resolve, reject) => {
-        client.set(
-            'storedUsers',
-            JSON.stringify(newArray),
-            function (err, result) {
-                if (err) {
                     return reject({
                         error: true,
-                        message: err,
+                        message: error,
                     });
                 }
+            });
+        })
+    }
 
-                return resolve({
-                    users: result,
-                });
-            }
-        );
-    });
+    setRedisUsers(newArray) {
+        return new Promise((resolve, reject) => {
+            this.client.set(
+                'storedUsers',
+                JSON.stringify(newArray),
+                function (err, result) {
+                    if (err) {
+                        return reject({
+                            error: true,
+                            message: err,
+                        });
+                    }
+    
+                    return resolve({
+                        users: result,
+                    });
+                }
+            );
+        })
+    }
 }
 
-module.exports = { addRedisUser, setRedisUsers }
+module.exports = RedisManager;
