@@ -5,11 +5,15 @@ const client = redis.createClient({
     port: 6379,
 });
 
+client.on("connect", function () {
+    console.log("redis connected");
+});
+
 client.on('error', err => {
     console.log('Error ' + err);
 });
 
-export function addRedisUser(user) {
+function addRedisUser(user) {
     return new Promise((resolve, reject) => {
         client.get('storedUsers', (error, users) => {
             if (users) {
@@ -40,7 +44,7 @@ export function addRedisUser(user) {
     });
 }
 
-export function setRedisUsers(newArray) {
+function setRedisUsers(newArray) {
     return new Promise((resolve, reject) => {
         client.set(
             'storedUsers',
@@ -60,3 +64,5 @@ export function setRedisUsers(newArray) {
         );
     });
 }
+
+module.exports = { addRedisUser, setRedisUsers }
