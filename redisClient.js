@@ -40,7 +40,7 @@ export function addRedisUser(user) {
     });
 }
 
-export function setRedisUsers(user) {
+export function setRedisUsers(newArray) {
     return new Promise((resolve, reject) => {
         client.set(
             'storedUsers',
