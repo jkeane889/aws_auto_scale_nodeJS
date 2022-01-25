@@ -20,7 +20,19 @@ function App() {
     console.log('connecting to socket')
     console.log(socket.connected); // true
     console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+
+    // fake user
+    const fakeUser = {
+      id: 1,
+      name: 'John Doe'
+    }
+
+    setUser(fakeUser, socket)
   });
+
+  const setUser = (user, socket) => {
+    socket.emit('user_connected', user);
+  }
 
   return (
     <div className="App">

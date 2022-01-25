@@ -4,8 +4,8 @@ const express = require('express');
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 const { createClient } = require("redis");
-const { addRedisUser } = require('./redisClient')
 const { createAdapter } = require("@socket.io/redis-adapter");
+const { setRedisUsers, addRedisUser } = require('./redisClient')
 
 // config for socket.io - may not need!
 const config = {
@@ -17,6 +17,9 @@ const config = {
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {});
+
+// initialize Redis users to empty array
+setRedisUsers([]);
 
 // to utilize CORS with origin
 app.use(function (req, res, next) {
@@ -48,9 +51,22 @@ const subClient = pubClient.duplicate();
 
 io.adapter(createAdapter(pubClient, subClient));
 
-io.on("connection", (socket) => {
+io.on("connection", (client) => {
     console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-    socket.emit('hello to all clients!');
+    client.emit('hello to all clients!');
+
+    client.on('user_connected', async (user) => {
+        console.log('this is the user: ', user)
+
+        const updatedUsers = await addRedisUser({
+            name: user.name,
+            id: user.id,
+            socketId: client.id,
+        });
+
+        console.log('added new user to redis')
+        console.log(`Redis add user ${JSON.stringify(updatedUsers)}`)
+    })
 });
 
 httpServer.listen(3000, () => {

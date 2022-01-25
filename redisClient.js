@@ -39,3 +39,24 @@ export function addRedisUser(user) {
         });
     });
 }
+
+export function setRedisUsers(user) {
+    return new Promise((resolve, reject) => {
+        client.set(
+            'storedUsers',
+            JSON.stringify(newArray),
+            function (err, result) {
+                if (err) {
+                    return reject({
+                        error: true,
+                        message: err,
+                    });
+                }
+
+                return resolve({
+                    users: result,
+                });
+            }
+        );
+    });
+}
