@@ -1,13 +1,10 @@
-const cors = require('cors')
-const path = require('path');
-const express = require('express');
-const { Server } = require("socket.io");
-const { createServer } = require("http");
-const { createClient } = require("redis");
-const RedisManager = require('./redisClient')
-const { createAdapter } = require("@socket.io/redis-adapter");
-
-// a comment
+import * as path from 'path'
+import express from 'express'
+import { Server } from "socket.io";
+import { createServer } from "http";
+import { createClient } from "redis";
+import { startRedis } from './redisClient.js'
+import { createAdapter } from "@socket.io/redis-adapter";
 
 // config for socket.io - may not need!
 const config = {
@@ -19,10 +16,9 @@ const config = {
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {});
-const redisCache = new RedisManager();
 
 // initialize Redis users to empty array
-redisCache.setRedisUsers([]);
+startRedis()
 
 // to utilize CORS with origin
 app.use(function (req, res, next) {
@@ -49,13 +45,13 @@ app.get('*', (req, res) => {
 });
 
 // TODO: save Redis cluster host name in environmental file
-const pubClient = createClient({ host: 'redis-test.sufcdc.0001.use1.cache.amazonaws.com', port: 6379 });
+const pubClient = createClient({ host: 'localhost', port: 6379 });
 const subClient = pubClient.duplicate();
 
 io.adapter(createAdapter(pubClient, subClient));
 
 io.on("connection", (client) => {
-    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    console.log(client.id); // x8WIv7-mJelg7on_ALbx
     client.emit('hello to all clients!');
 
     client.on('user_connected', async (user) => {
